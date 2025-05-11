@@ -1,0 +1,180 @@
+Dynamic Programming:-
+covering recurrence relations, memoization, and tabulation — the three pillars of solving Dynamic Programming (DP) problems.
+
+🧠 1. What is a Recurrence Relation?
+A recurrence relation is an equation that defines a function in terms of its values at smaller inputs (i.e., subproblems).
+
+✅ Why It Matters in DP:
+It shows how the problem breaks down into overlapping subproblems
+
+It is the foundation on which memoization and tabulation are built
+
+🔸 General Format:
+F(n) = F(n-1) + F(n-2)
+This means the result at position n depends on results at n-1 and n-2.
+
+📌 2. Classic Example: Fibonacci Sequence
+Let’s use this to explain everything.
+
+Problem:
+Find the nth Fibonacci number where:
+Fib(0) = 0, Fib(1) = 1, and
+Fib(n) = Fib(n-1) + Fib(n-2) for n ≥ 2
+
+📘 Step-by-Step:
+🧩 A. Recurrence Relation
+
+Fib(n) = Fib(n-1) + Fib(n-2)
+This is the core formula.
+It means:
+
+To compute Fib(n), you must compute Fib(n-1) and Fib(n-2).
+
+💾 B. Memoization (Top-Down DP)
+Memoization means:
+Solve the problem recursively, but store the result of each subproblem so you don't recompute it.
+
+🔧 Java Code (Memoization):
+import java.util.*;
+
+public class FibonacciMemo {
+    static int[] memo;
+
+    public static int fib(int n) {
+        memo = new int[n + 1];
+        Arrays.fill(memo, -1);
+        return helper(n);
+    }
+
+    private static int helper(int n) {
+        if (n <= 1) return n;
+
+        if (memo[n] != -1) return memo[n];
+
+        // Recurrence relation
+        memo[n] = helper(n - 1) + helper(n - 2);
+        return memo[n];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fib(6)); // Output: 8
+    }
+}
+✅ Key Points:
+Avoids recalculating the same fib(n) again and again
+
+Saves results in an array memo[]
+
+Top-down because it breaks fib(6) → fib(5) → fib(4)...
+
+📥 C. Tabulation (Bottom-Up DP)
+Tabulation means:
+
+Solve the problem iteratively from the smallest subproblem, storing results in a table (usually an array).
+
+🔧 Java Code (Tabulation):
+
+public class FibonacciTab {
+    public static int fib(int n) {
+        if (n <= 1) return n;
+
+        int[] dp = new int[n + 1];  // Table to store results
+        dp[0] = 0;
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            // Recurrence relation
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[n];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fib(6)); // Output: 8
+    }
+}
+✅ Key Points:
+No recursion
+
+Uses a bottom-up loop to build the answer step by step
+
+Fills dp[] using recurrence
+
+Often more efficient in time and space than memoization
+
+🧠 Theory Summary Table:
+Concept	Memoization	Tabulation
+Strategy	Top-down (recursive)	Bottom-up (iterative)
+Approach	Start with big problem, break down	Start with base case, build up
+Caching	Yes, with memo array/map	Yes, with DP table
+Code Style	Recursive	Iterative
+Stack Usage	Uses call stack (can overflow)	No risk of stack overflow
+Space	O(n)	O(n), can optimize to O(1) sometimes
+
+✅ Quick Visual:
+Recurrence Tree (naive recursion):
+markdown
+Copy
+Edit
+        Fib(5)
+       /     \
+    Fib(4)   Fib(3)
+    /   \     /   \
+  Fib(3)... Fib(2)...
+Memoization cuts the repeated branches, and tabulation never even builds the tree — it just walks from 0 → n.
+
+🛠 Applying This to Any DP Problem
+1. Define the problem in terms of n
+What does F(n) represent?
+
+2. Figure out the recurrence
+How can I build F(n) from smaller inputs?
+
+3. Choose memoization or tabulation
+4. Implement and optimize
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Memoization = Top-Down
+    Solve the original big problem first, and recursively solve smaller subproblems only when needed. You cache the results as you go.
+Tabulation = Bottom-Up
+    Start from the smallest subproblems, compute and store all results in a table, and build up to the big problem step by step.
+
+🟨 Memoization (Top-Down)
+You're asked: “What is Fib(6)?”
+You break it down as follows:
+
+scss
+Copy
+Edit
+fib(6) → needs fib(5) and fib(4)
+fib(5) → needs fib(4) and fib(3)
+fib(4) → needs fib(3) and fib(2)
+...etc
+🔼 You start from the top (fib(6)) and break it down into smaller subproblems.
+
+You only compute a subproblem if it’s required.
+
+This is called top-down.
+
+🟩 Tabulation (Bottom-Up)
+You say:
+
+Let's calculate fib(0) first.
+
+Then use it to compute fib(1).
+
+Then use both to compute fib(2).
+
+…and keep going until fib(n).
+
+python-repl
+Copy
+Edit
+dp[0] = 0
+dp[1] = 1
+dp[2] = dp[1] + dp[0]
+dp[3] = dp[2] + dp[1]
+...
+dp[6] = dp[5] + dp[4]
+🔽 You start from the bottom (base cases) and build your way up — hence bottom-up.
